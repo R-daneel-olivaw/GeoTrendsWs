@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+	<Properties>
+
+		<Property name="log-path">logs</Property>
+
+	</Properties>
+
+	<Appenders>
+
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<RollingFile name="rolling-file-log" fileName="${log-path}/geo-trends-ws.log"
+			filePattern="${log-path}/geo-trends-ws-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+
+		<RollingFile name="error-rolling-file-log" fileName="${log-path}/geo-trends-ws-errors.log"
+			filePattern="${log-path}/geo-trends-ws-errors-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+
+		<Async name="async-rolling-file-log">
+			<AppenderRef ref="rolling-file-log" />
+		</Async>
+
+		<Async name="async-error-rolling-file-log">
+			<AppenderRef ref="rolling-file-log" />
+		</Async>
+
+	</Appenders>
+
+	<Loggers>
+
+		<Logger name="aks.geo.trends.ws" level="trace" additivity="true">
+			<Appender-ref ref="async-rolling-file-log" level="trace" />
+			<Appender-ref ref="async-error-rolling-file-log" level="warn" />
+		</Logger>
+
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+			<Appender-ref ref="async-error-rolling-file-log" level="warn" />
+		</Root>
+
+	</Loggers>
+
+</Configuration>
