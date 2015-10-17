@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import aks.geo.trends.ws.hibernate.Region;
@@ -28,8 +29,8 @@ public class WelcomeController {
 		return "test";
 	}
 
-	@RequestMapping(value = "/trending/{regionId}")
-	public String listIndia(Model model,@PathVariable String regionId) {
+	@RequestMapping(method = RequestMethod.GET, value = "/trending/{regionId}")
+	public String listIndia(Model model, @PathVariable String regionId) {
 		Region region = regionService.getRegion(regionId);
 
 		List<String> keywords = keywordService.getTrending(region);
@@ -39,7 +40,7 @@ public class WelcomeController {
 		return "testList";
 	}
 
-	@RequestMapping(value = "/trending/{regionId}", consumes = "application/json")
+	@RequestMapping(method = RequestMethod.GET, value = "/trending/{regionId}", consumes = "application/json")
 	public @ResponseBody JsonRegionalTrending listIndiaJson(@PathVariable String regionId) {
 		Region region = regionService.getRegion(regionId);
 
