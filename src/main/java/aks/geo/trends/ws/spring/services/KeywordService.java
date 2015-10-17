@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import aks.geo.trends.ws.hibernate.Keyword;
 import aks.geo.trends.ws.hibernate.Region;
+import aks.geo.trends.ws.json.JsonKeyword;
+import aks.geo.trends.ws.json.JsonRegion;
+import aks.geo.trends.ws.json.JsonRegionalTrending;
 import aks.geo.trends.ws.spring.daos.KeywordsDao;
 import aks.geo.trends.ws.spring.daos.RegionsDao;
 
@@ -42,7 +45,6 @@ public class KeywordService {
 	}
 
 	private List<Keyword> convertToDbPojos(List<String> trending, Region reg, Map<String, Date> addedDateMap) {
-		// TODO Auto-generated method stub
 
 		List<Keyword> keywords = new ArrayList<>();
 		for (String item : trending) {
@@ -66,7 +68,6 @@ public class KeywordService {
 
 	@Transactional
 	public List<String> getTrending(Region region) {
-		// TODO Auto-generated method stub
 		 
 		List<String> stringKeywords = new ArrayList<>();
 		
@@ -77,5 +78,29 @@ public class KeywordService {
 		}
 		
 		return stringKeywords;
+	}
+
+	@Transactional
+	public JsonRegionalTrending getTrendingJson(Region region) {
+		
+		JsonRegionalTrending jsonRegionalTrending = new JsonRegionalTrending();
+		
+		JsonRegion jsonRegion = new JsonRegion();
+		jsonRegion.setRegion(region.getRegion());
+		jsonRegionalTrending.setRegion(jsonRegion);
+		
+		List<JsonKeyword> jsonKeywords = new ArrayList<>();
+		jsonRegionalTrending.setTrending(jsonKeywords);
+		
+		List<Keyword> keywords = keywordDao.getKeywords(region);
+		for (Keyword keyword : keywords) {
+			
+			JsonKeyword jsonKeyword = new JsonKeyword();
+			jsonKeyword.setAddedDate(keyword.getAddedDate());
+			jsonKeyword.setKeyword(keyword.getKeyword());
+			jsonKeywords.add(jsonKeyword);
+		}
+		
+		return jsonRegionalTrending;
 	}
 }

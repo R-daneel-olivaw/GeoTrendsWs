@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import aks.geo.trends.ws.hibernate.Keyword;
 import aks.geo.trends.ws.hibernate.Region;
+import aks.geo.trends.ws.json.JsonRegionalTrending;
 import aks.geo.trends.ws.spring.services.KeywordService;
 import aks.geo.trends.ws.spring.services.RegionService;
 
@@ -37,6 +38,17 @@ public class WelcomeController {
 		model.addAttribute("reg", "India");
 		
 		return "testList";
+	}
+	
+	@RequestMapping(value="/india/json")
+	public @ResponseBody JsonRegionalTrending listIndiaJson()
+	{
+		Region region = regionService.getRegion("IN");
+		
+		JsonRegionalTrending regionalTrending = keywordService.getTrendingJson(region);
+		
+		
+		return regionalTrending;
 	}
 
 }
