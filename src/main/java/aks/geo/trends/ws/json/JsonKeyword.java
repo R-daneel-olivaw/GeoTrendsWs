@@ -2,6 +2,10 @@ package aks.geo.trends.ws.json;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import aks.geo.trends.ws.json.util.CustomDateSerializer;
+
 public class JsonKeyword {
 
 	private String keyword;
@@ -15,6 +19,7 @@ public class JsonKeyword {
 		this.keyword = keyword;
 	}
 
+	@JsonSerialize(using = CustomDateSerializer.class)
 	public Date getAddedDate() {
 		return addedDate;
 	}
