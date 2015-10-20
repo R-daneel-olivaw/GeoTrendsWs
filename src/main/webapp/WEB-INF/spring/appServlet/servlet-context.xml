@@ -33,6 +33,7 @@
 		<property name="url" value="jdbc:mysql://localhost:3306/geotrends" />
 		<property name="username" value="root" />
 		<property name="password" value="anugrah18" />
+		<property name="connectionProperties" value="useUnicode=yes;characterEncoding=utf8;" />
 	</bean>
 
 	<bean id="sessionFactory"
